@@ -32,7 +32,7 @@ async def on_command_error(ctx, error):
 
 def is_authorized(ctx):
     for role in ctx.message.author.roles:
-        for role_hardcoded in roles_ids:
+        for role_hardcoded in role_ids:
             if role.id==role_hardcoded: #Autorise un certain role à faire les commandes (ID)
                 return true
     if ctx.message.author.id in list_users: #Autorise les utilisateurs spécifiés (leur ID)
