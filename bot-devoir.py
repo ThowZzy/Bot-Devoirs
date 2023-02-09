@@ -12,10 +12,10 @@ import typing
 intents = discord.Intents.all()
 client = commands.Bot(command_prefix='$', intents=intents)
 
-#ID du channel permettant de faire les commandes
-role_id=943537838983630878
+#ID des rôles qui permettent de modifier la BD
+role_ids=[943537838983630878]
 
-#Liste d'ID des personnes autorisées
+#Liste d'ID des personnes autorisées à modif la BD
 list_users=[274654402139258885, 234673558935175168]
 
 conn = connect("database.sqlite")
@@ -32,9 +32,10 @@ async def on_command_error(ctx, error):
 
 def is_authorized(ctx):
     for role in ctx.message.author.roles:
-        if role.id==role_id: #Autorise un certain role à faire les commandes (ID)
-            return true
-    if ctx.message.author.id in list_users: #Autorisé pour les utilisateurs spécifiés (leur ID)
+        for role_hardcoded in roles_ids:
+            if role.id==role_hardcoded: #Autorise un certain role à faire les commandes (ID)
+                return true
+    if ctx.message.author.id in list_users: #Autorise les utilisateurs spécifiés (leur ID)
         return True
     return False
 
