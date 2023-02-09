@@ -20,8 +20,6 @@ list_users=[274654402139258885, 234673558935175168]
 
 TOKEN=""
 
-conn = connect("database.sqlite")
-
 @client.event
 async def on_ready():
     print("Ready.")
@@ -53,6 +51,13 @@ def create_database():
 if not os.path.isfile("database.sqlite"):
     create_database()
     print("Base de données créée.")
+
+conn = connect("database.sqlite")
+
+@client.command(brief="Qui a créé ce bot?", description="Qui a créé ce bot? (Crédits des devs)")
+async def credits(ctx):         
+    embed = discord.Embed(title="Credits", description="ThowZzy#2526 (Thomas, Cybersécurité 2021-2023) - https://thowzzy.be/ \nAstro^^$#7845 (Julien, Cybersécurité 2021-2023) - https://astroware.me/ \n\nGithub : https://github.com/ThowZzy/Bot-Devoirs", color=0x00ff00, timestamp=datetime.datetime.now().astimezone(timezone('Europe/Brussels')))
+    await ctx.send(embed=embed)
 
 
 @commands.check(is_authorized)
