@@ -1,8 +1,10 @@
 Première utilisation:
 
--Modifier le fichier bot-devoir.py, la ligne "await client.start('TOKEN')" et mettre le token du bot.
+-Modifier dans le fichier bot-devoir.py les variables "role_ids", "list_users" et TOKEN.
+-role_ids est une liste d'identifiant de role qui ont l'autorisation de modifier la base de données.
+-list_users est la même chose mais avec l'identifiant d'un utilisateur.
+-TOKEN est le token du bot.
 -Installer les modules qui ne seraient pas installé, ex: discord.py.
--Modifier la fonction "def is_authorized(ctx)" afin d'autoriser certaines personnes ou rôles à executer les commandes "admins", spécifié avec les IDs.
 
 Notes:
 

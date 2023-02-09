@@ -18,6 +18,8 @@ role_ids=[943537838983630878]
 #Liste d'ID des personnes autorisées à modif la BD
 list_users=[274654402139258885, 234673558935175168]
 
+TOKEN=""
+
 conn = connect("database.sqlite")
 
 @client.event
@@ -288,6 +290,6 @@ async def main():
     async with client:
         client.loop.create_task(agenda_embed())
         client.loop.create_task(react_button())
-        await client.start('TOKEN')
+        await client.start(TOKEN)
 
 asyncio.run(main())
