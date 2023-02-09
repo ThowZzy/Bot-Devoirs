@@ -84,7 +84,7 @@ async def agenda(ctx, channel: discord.TextChannel, link):
 
 @commands.check(is_authorized)
 @client.command(name="bd",
-                brief="Supprimer un embed de la base de donné ou afficher la DB", 
+                brief="Supprimer un embed de la base de données ou afficher la BD", 
                 description=f"Supprimer un embed de la base de donné ou afficher la DB. Usage: {client.command_prefix}bd <del|show> <ID|Optionnal>")
 async def bd(ctx, command, ID=None):
     guild_id = ctx.message.guild.id
