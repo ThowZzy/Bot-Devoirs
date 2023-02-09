@@ -6,7 +6,6 @@ from datetime import datetime
 import requests
 from icalendar import Calendar
 from pytz import timezone
-#from discord_ui import DiscordComponents, Button, ButtonStyle, InteractionEventType, component
 from sqlite3 import *
 import re
 import typing
@@ -19,7 +18,7 @@ role_id=943537838983630878
 #Liste d'ID des personnes autorisées
 list_users=[274654402139258885, 234673558935175168]
 
-conn = connect("data.sqlite")
+conn = connect("database.sqlite")
 
 @client.event
 async def on_ready():
@@ -39,6 +38,18 @@ def is_authorized(ctx):
         return True
     return False
 
+
+def create_database():
+	conn = connect("database.sqlite")
+	cur = conn.cursor()
+	cur.executescript("create table messages (id_channel int, id_embed int, id_server int, link text)")
+	cur.close()
+	conn.close()
+
+#Création DB si non existante
+if not os.path.isfile("database.sqlite"):
+    create_database()
+    print("Base de données créée.")
 
 
 @commands.check(is_authorized)
