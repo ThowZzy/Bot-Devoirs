@@ -56,7 +56,7 @@ conn = connect("database.sqlite")
 
 @client.command(brief="Qui a créé ce bot?", description="Qui a créé ce bot? (Crédits des devs)")
 async def credits(ctx):         
-    embed = discord.Embed(title="Credits", description="ThowZzy#2526 (Thomas, Cybersécurité 2021-2023) - https://thowzzy.be/ \nAstro^^$#7845 (Julien, Cybersécurité 2021-2023) - https://astroware.me/ \n\nGithub : https://github.com/ThowZzy/Bot-Devoirs", color=0x00ff00, timestamp=datetime.datetime.now().astimezone(timezone('Europe/Brussels')))
+    embed = discord.Embed(title="Credits", description="ThowZzy#2526 (Thomas, Cybersécurité 2020-2023) - https://thowzzy.be/ \nAstro^^$#7845 (Julien, Cybersécurité 2020-2023) - https://astroware.me/ \n\nGithub : https://github.com/ThowZzy/Bot-Devoirs", color=0x00ff00, timestamp=datetime.datetime.now().astimezone(timezone('Europe/Brussels')))
     await ctx.send(embed=embed)
 
 
