@@ -56,7 +56,7 @@ conn = connect("database.sqlite")
 
 @client.command(brief="Qui a créé ce bot?", description="Qui a créé ce bot? (Crédits des devs)")
 async def credits(ctx):         
-    embed = discord.Embed(title="Credits", description="ThowZzy#2526 (Thomas, Cybersécurité 2020-2023) - https://thowzzy.be/ \nAstro^^$#7845 (Julien, Cybersécurité 2020-2023) - https://astroware.me/ \n\nGithub : https://github.com/ThowZzy/Bot-Devoirs", color=0x00ff00, timestamp=datetime.datetime.now().astimezone(timezone('Europe/Brussels')))
+    embed = discord.Embed(title="Credits", description="ThowZzy#2526 (Thomas, Cybersécurité 2021-2023) - https://thowzzy.be/ \nAstro^^$#7845 (Julien, Cybersécurité 2021-2023) - https://astroware.me/ \n\nGithub : https://github.com/ThowZzy/Bot-Devoirs", color=0x00ff00, timestamp=datetime.datetime.now().astimezone(timezone('Europe/Brussels')))
     await ctx.send(embed=embed)
 
 
@@ -151,10 +151,12 @@ def valid_link(link):
 
 
 def get_devoirs(calendar):
-
-    r = requests.get(calendar)
+    try:
+        r = requests.get(calendar)
+        r.raise_for_status()
+    except:
+        return None
     gcal = Calendar.from_ical(r.text)
-
     devoirs = []
     doublons={}
     for event in gcal.walk('VEVENT'):
@@ -211,6 +213,11 @@ async def agenda_embed():
                         embed.set_footer(text="Mis à jour")
 
                         devoirs = get_devoirs(r[3])
+                        if devoirs is None:
+                            embed = discord.Embed(title="Devoirs (Moodle)", description="Learn injoignable..",color=0x00ff00, timestamp=datetime.datetime.now().astimezone(timezone('Europe/Brussels')))
+                            embed.set_footer(text="Mis à jour")
+                            await embed_message.edit(embed=embed)
+                            break
                         for devoir in devoirs:
                             now = datetime.datetime.now().astimezone(timezone('Europe/Brussels'))
                             delta = devoir[4] - now
@@ -258,6 +265,7 @@ async def agenda_embed():
                     print(error)
                     # cur.execute(f"DELETE FROM messages WHERE id_embed = {embed_id} ;")
                     # conn.commit()
+                    await asyncio.sleep(30)
                     continue
 
 
@@ -275,6 +283,10 @@ async def react_button():
         description = ""
         if calendar:
             devoirs = get_devoirs(calendar)
+            if devoirs is None:
+                embed = discord.Embed(title="Learn injoignable..", description=f"Impossible de contacter learn avec le lien {calendar}")
+                await res.response.send_message(ephemeral=True,embed=embed)
+                continue
             for devoir in devoirs:
                 if devoir[1]:
                     description += f"**{devoir[0]}:**\n{devoir[1].strip()}\n\n"
