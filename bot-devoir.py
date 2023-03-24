@@ -13,12 +13,16 @@ intents = discord.Intents.all()
 client = commands.Bot(command_prefix='$', intents=intents)
 
 #ID des rôles qui permettent de modifier la BD
-role_ids=[943537838983630878]
+role_ids=[1088741449723560027]
 
 #Liste d'ID des personnes autorisées à modif la BD
-list_users=[274654402139258885, 234673558935175168]
+list_users=[451457197675642901, 234673558935175168]
 
+#Token du bot
 TOKEN=""
+
+#Interval d'update pour les devoirs (en secondes)
+interval=15
 
 @client.event
 async def on_ready():
@@ -52,6 +56,7 @@ if not os.path.isfile("database.sqlite"):
     create_database()
     print("Base de données créée.")
 
+
 conn = connect("database.sqlite")
 
 @client.command(brief="Qui a créé ce bot?", description="Qui a créé ce bot? (Crédits des devs)")
@@ -73,8 +78,7 @@ async def agenda(ctx, channel: discord.TextChannel, link):
     embed = discord.Embed(title="Devoirs (Moodle)", color=0x00ff00,
                                               timestamp=datetime.datetime.now().astimezone(timezone('Europe/Brussels')))
     embed.set_footer(text="Récupération des devoirs..")
-    embed_id = await channel.send(embed=embed, components=[
-    discord.Button(style=discord.ButtonStyle.green, label="Description des devoirs")])
+    embed_id = await channel.send(embed=embed, view=discord.ui.View(timeout=None).add_item(discord.ui.Button(style=discord.ButtonStyle.green, label="Description des devoirs")))
     cur = conn.cursor()
     cur.execute(f"insert into messages (id_channel, id_embed ,id_server, link) values (?, ?, ?, ?)", (channel.id, embed_id.id, guild_id, link))
     conn.commit()
@@ -85,7 +89,7 @@ async def agenda(ctx, channel: discord.TextChannel, link):
 @commands.check(is_authorized)
 @client.command(name="bd",
                 brief="Supprimer un embed de la base de données ou afficher la BD", 
-                description=f"Supprimer un embed de la base de donné ou afficher la DB. Usage: {client.command_prefix}bd <del|show> <ID|Optionnal>")
+                description=f"Supprimer un embed de la base de données ou afficher la DB. Usage: {client.command_prefix}bd <del|show> <ID|Optionnal>")
 async def bd(ctx, command, ID=None):
     guild_id = ctx.message.guild.id
     if command == 'del':
@@ -193,8 +197,9 @@ def get_devoirs(calendar):
 
 
 async def agenda_embed():
+    global interval
     while True:
-        await asyncio.sleep(15)
+        await asyncio.sleep(interval)
         cur = conn.cursor()
         cur.execute("select * from messages")
         rs=cur.fetchall()
@@ -265,13 +270,12 @@ async def agenda_embed():
                     print(error)
                     # cur.execute(f"DELETE FROM messages WHERE id_embed = {embed_id} ;")
                     # conn.commit()
-                    await asyncio.sleep(30)
+                    await asyncio.sleep(10)
                     continue
 
 
 async def react_button():
     while True:
-        #res = await client.wait_for("button_click")
         res = await client.wait_for('interaction', check=lambda interaction: interaction.data["component_type"] == 2)
         calendar = ""
         cur = conn.cursor()
