@@ -4,6 +4,7 @@
     - role_ids est une liste d'identifiant de role qui ont l'autorisation de modifier la base de données.
     - list_users est la même chose mais avec l'identifiant d'un utilisateur.
     - TOKEN est le token du bot.
+    - interval peut aussi être modifié, mais pas en dessous de ~5 secondes
   - Installer les modules qui ne seraient pas installé, ex: discord.py.
 
 - Notes:
